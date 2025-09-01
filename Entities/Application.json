@@ -1,0 +1,77 @@
+{
+  "name": "Application",
+  "type": "object",
+  "properties": {
+    "student_id": {
+      "type": "string",
+      "description": "Reference to student who applied"
+    },
+    "internship_id": {
+      "type": "string",
+      "description": "Reference to internship applied for"
+    },
+    "cover_letter": {
+      "type": "string",
+      "description": "Student's cover letter"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Applied",
+        "Under Review",
+        "Shortlisted",
+        "Interview Scheduled",
+        "Selected",
+        "Rejected",
+        "Withdrawn"
+      ],
+      "default": "Applied",
+      "description": "Application status"
+    },
+    "application_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When application was submitted"
+    },
+    "interview_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scheduled interview date"
+    },
+    "interview_mode": {
+      "type": "string",
+      "enum": [
+        "Online",
+        "In-person",
+        "Phone"
+      ],
+      "description": "Interview mode"
+    },
+    "interview_feedback": {
+      "type": "string",
+      "description": "Interview feedback from company"
+    },
+    "rejection_reason": {
+      "type": "string",
+      "description": "Reason for rejection (if applicable)"
+    },
+    "match_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "AI-calculated match score"
+    },
+    "recommendation_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Why this internship was recommended"
+    }
+  },
+  "required": [
+    "student_id",
+    "internship_id",
+    "application_date"
+  ]
+}

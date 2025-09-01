@@ -1,0 +1,167 @@
+{
+  "name": "Internship",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Internship title/role"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Company offering the internship"
+    },
+    "company_logo": {
+      "type": "string",
+      "description": "Company logo URL"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed internship description"
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "Web Development",
+        "Mobile Development",
+        "Data Science",
+        "AI/ML",
+        "Cloud Computing",
+        "Cybersecurity",
+        "DevOps",
+        "UI/UX Design",
+        "Backend Development",
+        "Full Stack Development"
+      ],
+      "description": "Internship domain/category"
+    },
+    "required_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required technical skills"
+    },
+    "preferred_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Preferred additional skills"
+    },
+    "location": {
+      "type": "string",
+      "description": "Internship location"
+    },
+    "work_mode": {
+      "type": "string",
+      "enum": [
+        "Remote",
+        "On-site",
+        "Hybrid"
+      ],
+      "description": "Work arrangement"
+    },
+    "duration": {
+      "type": "string",
+      "description": "Internship duration (e.g., '3 months', '6 months')"
+    },
+    "stipend": {
+      "type": "number",
+      "description": "Monthly stipend amount"
+    },
+    "application_deadline": {
+      "type": "string",
+      "format": "date",
+      "description": "Last date to apply"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Expected start date"
+    },
+    "min_cgpa": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Minimum CGPA requirement"
+    },
+    "eligible_courses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "MCA",
+          "M.Tech CS",
+          "M.Sc CS",
+          "Other"
+        ]
+      },
+      "description": "Eligible courses"
+    },
+    "responsibilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key responsibilities"
+    },
+    "learning_outcomes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "What interns will learn"
+    },
+    "selection_process": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Selection process steps"
+    },
+    "company_contact": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "description": "Company contact person"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Closed",
+        "Draft"
+      ],
+      "default": "Active",
+      "description": "Internship status"
+    },
+    "total_positions": {
+      "type": "number",
+      "description": "Total available positions"
+    },
+    "filled_positions": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of positions filled"
+    }
+  },
+  "required": [
+    "title",
+    "company_name",
+    "description",
+    "domain",
+    "required_skills",
+    "location",
+    "duration",
+    "application_deadline"
+  ]
+}

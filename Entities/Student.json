@@ -1,0 +1,164 @@
+{
+  "name": "Student",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique student identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Full name of the student"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Student's email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Student's phone number"
+    },
+    "course": {
+      "type": "string",
+      "enum": [
+        "MCA",
+        "M.Tech CS",
+        "M.Sc CS",
+        "Other"
+      ],
+      "description": "Student's course"
+    },
+    "semester": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 6,
+      "description": "Current semester"
+    },
+    "cgpa": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Current CGPA"
+    },
+    "university": {
+      "type": "string",
+      "description": "University/College name"
+    },
+    "graduation_year": {
+      "type": "number",
+      "description": "Expected graduation year"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Technical skills"
+    },
+    "interests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Areas of interest"
+    },
+    "resume_url": {
+      "type": "string",
+      "description": "Link to student's resume"
+    },
+    "profile_picture": {
+      "type": "string",
+      "description": "Profile picture URL"
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "pincode": {
+          "type": "string"
+        }
+      },
+      "description": "Student's address"
+    },
+    "preferred_location": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Preferred internship locations"
+    },
+    "work_mode_preference": {
+      "type": "string",
+      "enum": [
+        "Remote",
+        "On-site",
+        "Hybrid",
+        "Any"
+      ],
+      "description": "Preferred work mode"
+    },
+    "min_stipend": {
+      "type": "number",
+      "description": "Minimum expected stipend"
+    },
+    "availability_start": {
+      "type": "string",
+      "format": "date",
+      "description": "When student is available to start"
+    },
+    "availability_duration": {
+      "type": "string",
+      "description": "How long student can intern (e.g., '3 months', '6 months')"
+    },
+    "linkedin_url": {
+      "type": "string",
+      "description": "LinkedIn profile URL"
+    },
+    "github_url": {
+      "type": "string",
+      "description": "GitHub profile URL"
+    },
+    "portfolio_url": {
+      "type": "string",
+      "description": "Portfolio website URL"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Inactive",
+        "Graduated"
+      ],
+      "default": "Active",
+      "description": "Student status"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When student profile was created"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When student profile was last updated"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "email",
+    "course",
+    "semester",
+    "cgpa",
+    "university"
+  ]
+}
