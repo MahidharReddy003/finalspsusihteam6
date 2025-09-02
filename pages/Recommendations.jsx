@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { TrendingUp, Star, MapPin, Clock, DollarSign, Users, Building2, Briefcase, Target } from 'lucide-react';
+import { TrendingUp, Star, MapPin, Clock, DollarSign, Users, Building2, Briefcase, Target, Heart, Share2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { formatDate, formatCurrency, getDomainColor, truncateText } from '../utils';
 
 export default function Recommendations() {
+  const [savedRecommendations, setSavedRecommendations] = useState(new Set());
   const [selectedFilter, setSelectedFilter] = useState('all');
 
   // Mock data for recommended internships
@@ -284,13 +285,71 @@ export default function Recommendations() {
 
             {/* Actions */}
             <div className="p-6 pt-0">
+              <div className="flex gap-2 mb-3">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    const newSaved = new Set(savedRecommendations);
+                    if (newSaved.has(internship.id)) {
+                      newSaved.delete(internship.id);
+                      alert('Removed from saved recommendations');
+                    } else {
+                      newSaved.add(internship.id);
+                      alert('Added to saved recommendations');
+                    }
+                    setSavedRecommendations(newSaved);
+                  }}
+                  className={savedRecommendations.has(internship.id) ? 'text-red-600' : ''}
+                >
+                  <Heart className={`w-4 h-4 ${savedRecommendations.has(internship.id) ? 'fill-current' : ''}`} />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: internship.title,
+                        text: `Check out this recommended internship: ${internship.title} at ${internship.company}`,
+                        url: window.location.href
+                      });
+                    } else {
+                      alert('Sharing functionality not available on this browser');
+                    }
+                  }}
+                >
+                  <Share2 className="w-4 h-4" />
+                </Button>
+              </div>
               <div className="flex gap-3">
-                <Button className="flex-1" size="lg">
+                <Button 
+                  className="flex-1" 
+                  size="lg"
+                  onClick={() => {
+                    alert(`Applying to ${internship.title} at ${internship.company}`);
+                    // Here you would typically navigate to application form or make API call
+                  }}
+                >
                   <Briefcase className="w-4 h-4 mr-2" />
                   Apply Now
                 </Button>
-                <Button variant="outline" size="lg">
-                  Save
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => {
+                    const newSaved = new Set(savedRecommendations);
+                    if (newSaved.has(internship.id)) {
+                      newSaved.delete(internship.id);
+                      alert('Removed from saved recommendations');
+                    } else {
+                      newSaved.add(internship.id);
+                      alert('Added to saved recommendations');
+                    }
+                    setSavedRecommendations(newSaved);
+                  }}
+                >
+                  {savedRecommendations.has(internship.id) ? 'Saved' : 'Save'}
                 </Button>
               </div>
             </div>

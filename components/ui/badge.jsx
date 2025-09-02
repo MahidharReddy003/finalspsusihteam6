@@ -30,10 +30,12 @@ export function Badge({
 }) {
   const baseClasses = 'inline-flex items-center font-medium rounded-full';
   
-  const variantClasses = badgeVariants[variant] || badgeVariants.default;
+  // If className is provided, use it directly (for custom styling)
+  // Otherwise, use the variant system
+  const variantClasses = className ? '' : (badgeVariants[variant] || badgeVariants.default);
   const sizeClasses = badgeSizes[size] || badgeSizes.md;
   
-  const combinedClasses = `${baseClasses} ${variantClasses} ${sizeClasses} ${className}`;
+  const combinedClasses = `${baseClasses} ${variantClasses} ${sizeClasses} ${className}`.trim();
 
   return (
     <span 

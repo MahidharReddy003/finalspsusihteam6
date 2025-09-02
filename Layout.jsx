@@ -1,6 +1,6 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { createPageUrl } from "./utils";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { createPageUrl } from "./utils/index.js";
 import { 
   GraduationCap, 
   Briefcase, 
@@ -10,8 +10,10 @@ import {
   BarChart3,
   User,
   Bell,
-  Settings
+  Settings,
+  LogOut
 } from "lucide-react";
+import { useAuth } from "./src/AuthContext.jsx";
 import {
   Sidebar,
   SidebarContent,
@@ -64,6 +66,13 @@ const navigationItems = [
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <SidebarProvider>
@@ -141,9 +150,24 @@ export default function Layout({ children, currentPageName }) {
                 <p className="font-medium text-slate-900 text-sm truncate">Student</p>
                 <p className="text-xs text-slate-500 truncate">MCA Candidate</p>
               </div>
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-600">
-                <Settings className="w-4 h-4" />
-              </Button>
+                             <div className="flex gap-1">
+                 <Button 
+                   variant="ghost" 
+                   size="icon" 
+                   className="text-slate-400 hover:text-slate-600"
+                   onClick={() => navigate('/settings')}
+                 >
+                   <Settings className="w-4 h-4" />
+                 </Button>
+                 <Button 
+                   variant="ghost" 
+                   size="icon" 
+                   className="text-slate-400 hover:text-red-600"
+                   onClick={handleLogout}
+                 >
+                   <LogOut className="w-4 h-4" />
+                 </Button>
+               </div>
             </div>
           </SidebarFooter>
         </Sidebar>
@@ -157,11 +181,19 @@ export default function Layout({ children, currentPageName }) {
                 <GraduationCap className="w-6 h-6 text-blue-600" />
                 <h1 className="text-lg font-bold text-slate-900">MCA Internship Portal</h1>
               </div>
-              <div className="ml-auto flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="text-slate-400">
-                  <Bell className="w-5 h-5" />
-                </Button>
-              </div>
+                             <div className="ml-auto flex items-center gap-2">
+                 <Button 
+                   variant="ghost" 
+                   size="icon" 
+                   className="text-slate-400"
+                   onClick={() => {
+                     alert('Notifications feature coming soon!');
+                     // Here you would typically open notifications panel
+                   }}
+                 >
+                   <Bell className="w-5 h-5" />
+                 </Button>
+               </div>
             </div>
           </header>
 

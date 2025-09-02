@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Search, Filter, MapPin, Clock, DollarSign, Users, Building2, Briefcase } from 'lucide-react';
+import { Search, Filter, MapPin, Clock, DollarSign, Users, Building2, Briefcase, Heart, Share2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { formatDate, formatCurrency, getDomainColor, truncateText } from '../utils';
 
 export default function Internships() {
+  const [savedInternships, setSavedInternships] = useState(new Set());
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDomain, setSelectedDomain] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('All');
@@ -208,7 +209,51 @@ export default function Internships() {
 
             {/* Actions */}
             <div className="p-6 pt-0">
-              <Button className="w-full" size="lg">
+              <div className="flex gap-2 mb-3">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    const newSaved = new Set(savedInternships);
+                    if (newSaved.has(internship.id)) {
+                      newSaved.delete(internship.id);
+                      alert('Removed from saved internships');
+                    } else {
+                      newSaved.add(internship.id);
+                      alert('Added to saved internships');
+                    }
+                    setSavedInternships(newSaved);
+                  }}
+                  className={savedInternships.has(internship.id) ? 'text-red-600' : ''}
+                >
+                  <Heart className={`w-4 h-4 ${savedInternships.has(internship.id) ? 'fill-current' : ''}`} />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: internship.title,
+                        text: `Check out this internship: ${internship.title} at ${internship.company}`,
+                        url: window.location.href
+                      });
+                    } else {
+                      alert('Sharing functionality not available on this browser');
+                    }
+                  }}
+                >
+                  <Share2 className="w-4 h-4" />
+                </Button>
+              </div>
+              <Button 
+                className="w-full" 
+                size="lg"
+                onClick={() => {
+                  alert(`Applying to ${internship.title} at ${internship.company}`);
+                  // Here you would typically navigate to application form or make API call
+                }}
+              >
                 <Briefcase className="w-4 h-4 mr-2" />
                 Apply Now
               </Button>

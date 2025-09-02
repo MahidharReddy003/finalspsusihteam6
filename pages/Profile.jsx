@@ -21,7 +21,10 @@ import {
   ExternalLink,
   Github,
   Linkedin,
-  Globe
+  Globe,
+  Download,
+  Share2,
+  Printer
 } from "lucide-react";
 
 const SKILLS_OPTIONS = [
@@ -74,12 +77,54 @@ export default function Profile() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       alert('Profile saved successfully!');
+      
+      // Update profile completion percentage
+      const completionPercentage = calculateProfileCompletion();
+      if (completionPercentage >= 100) {
+        alert('🎉 Congratulations! Your profile is 100% complete and ready for internships!');
+      }
     } catch (error) {
       alert('Error saving profile. Please try again.');
       console.error('Error saving profile:', error);
     } finally {
       setSaving(false);
     }
+  };
+
+  const calculateProfileCompletion = () => {
+    let completed = 0;
+    let total = 0;
+
+    // Basic info
+    total += 4;
+    if (profile.full_name) completed++;
+    if (profile.email) completed++;
+    if (profile.phone) completed++;
+    if (profile.college_name) completed++;
+
+    // Education
+    total += 3;
+    if (profile.course) completed++;
+    if (profile.semester) completed++;
+    if (profile.cgpa) completed++;
+
+    // Skills and preferences
+    total += 3;
+    if (profile.skills.length > 0) completed++;
+    if (profile.preferred_domains.length > 0) completed++;
+    if (profile.preferred_locations.length > 0) completed++;
+
+    // Social profiles
+    total += 3;
+    if (profile.github_profile) completed++;
+    if (profile.linkedin_profile) completed++;
+    if (profile.portfolio_url) completed++;
+
+    // Resume
+    total += 1;
+    if (profile.resume_url) completed++;
+
+    return Math.round((completed / total) * 100);
   };
 
   const handleFileUpload = async (file) => {
@@ -102,23 +147,38 @@ export default function Profile() {
     }
   };
 
-  const removeSkill = (skillToRemove) => {
-    setProfile(prev => ({ 
-      ...prev, 
-      skills: prev.skills.filter(skill => skill !== skillToRemove) 
-    }));
+  const removeSkill = (skill) => {
+    setProfile(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill) }));
+  };
+
+  const addDomain = (domain) => {
+    if (!profile.preferred_domains.includes(domain)) {
+      setProfile(prev => ({ ...prev, preferred_domains: [...prev.preferred_domains, domain] }));
+    }
+  };
+
+  const removeDomain = (domain) => {
+    setProfile(prev => ({ ...prev, preferred_domains: prev.preferred_domains.filter(d => d !== domain) }));
+  };
+
+  const addLocation = (location) => {
+    if (!profile.preferred_locations.includes(location)) {
+      setProfile(prev => ({ ...prev, preferred_locations: [...prev.preferred_locations, location] }));
+    }
+  };
+
+  const removeLocation = (location) => {
+    setProfile(prev => ({ ...prev, preferred_locations: prev.preferred_locations.filter(l => l !== location) }));
   };
 
   const addProject = () => {
-    setProfile(prev => ({
-      ...prev,
-      projects: [...prev.projects, {
-        name: '',
-        description: '',
-        technologies: [],
-        github_url: ''
-      }]
-    }));
+    const newProject = {
+      name: '',
+      description: '',
+      technologies: [],
+      github_url: ''
+    };
+    setProfile(prev => ({ ...prev, projects: [...prev.projects, newProject] }));
   };
 
   const updateProject = (index, field, value) => {
@@ -135,6 +195,79 @@ export default function Profile() {
       ...prev,
       projects: prev.projects.filter((_, i) => i !== index)
     }));
+  };
+
+  const addCertification = () => {
+    const newCertification = {
+      name: '',
+      issuer: '',
+      date: '',
+      url: ''
+    };
+    setProfile(prev => ({ ...prev, certifications: [...prev.certifications, newCertification] }));
+  };
+
+  const updateCertification = (index, field, value) => {
+    setProfile(prev => ({
+      ...prev,
+      certifications: prev.certifications.map((cert, i) => 
+        i === index ? { ...cert, [field]: value } : cert
+      )
+    }));
+  };
+
+  const removeCertification = (index) => {
+    setProfile(prev => ({
+      ...prev,
+      certifications: prev.certifications.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleExportProfile = () => {
+    const profileData = JSON.stringify(profile, null, 2);
+    const blob = new Blob([profileData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'profile-data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('Profile exported successfully!');
+  };
+
+  const handleShareProfile = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'My Profile',
+        text: `Check out my profile: ${profile.full_name}`,
+        url: window.location.href
+      });
+    } else {
+      alert('Sharing functionality not available on this browser');
+    }
+  };
+
+  const handlePrintProfile = () => {
+    window.print();
+  };
+
+  const handleImportProfile = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const importedProfile = JSON.parse(e.target.result);
+          setProfile(importedProfile);
+          alert('Profile imported successfully!');
+        } catch (error) {
+          alert('Error importing profile. Please check the file format.');
+        }
+      };
+      reader.readAsText(file);
+    }
   };
 
   const calculateCompleteness = () => {
@@ -545,26 +678,50 @@ export default function Profile() {
         </Card>
       </motion.div>
 
-      {/* Save Button */}
-      <div className="flex justify-center">
-        <Button 
-          onClick={handleSave}
-          disabled={saving}
-          className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 px-8 py-2 text-lg"
-        >
-          {saving ? (
-            <>
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="w-5 h-5 mr-2" />
-              Save Profile
-            </>
-          )}
-        </Button>
-      </div>
+             {/* Action Buttons */}
+       <div className="flex justify-center gap-4">
+         <Button 
+           onClick={handleSave}
+           disabled={saving}
+           className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 px-8 py-2 text-lg"
+         >
+           {saving ? (
+             <>
+               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+               Saving...
+             </>
+           ) : (
+             <>
+               <Save className="w-5 h-5 mr-2" />
+               Save Profile
+             </>
+           )}
+         </Button>
+         <Button 
+           variant="outline"
+           onClick={handleExportProfile}
+           className="px-6 py-2"
+         >
+           <Download className="w-5 h-5 mr-2" />
+           Export
+         </Button>
+         <Button 
+           variant="outline"
+           onClick={handleShareProfile}
+           className="px-6 py-2"
+         >
+           <Share2 className="w-5 h-5 mr-2" />
+           Share
+         </Button>
+         <Button 
+           variant="outline"
+           onClick={handlePrintProfile}
+           className="px-6 py-2"
+         >
+           <Printer className="w-5 h-5 mr-2" />
+           Print
+         </Button>
+       </div>
     </div>
   );
 }

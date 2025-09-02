@@ -262,16 +262,39 @@ export default function Applications() {
                   <span>Last updated: {formatDate(application.last_updated)}</span>
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      alert(`Viewing application details for ${application.internship_title} at ${application.company}`);
+                      // Here you would typically navigate to application details page
+                    }}
+                  >
                     <Eye className="w-4 h-4 mr-2" />
                     View Details
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      alert(`Downloading application for ${application.internship_title}`);
+                      // Here you would typically generate and download application PDF
+                    }}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>
                   {application.status === 'Applied' && (
-                    <Button variant="destructive" size="sm">
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      onClick={() => {
+                        if (window.confirm(`Are you sure you want to withdraw your application for ${application.internship_title}?`)) {
+                          alert(`Application withdrawn for ${application.internship_title}`);
+                          // Here you would typically make API call to withdraw application
+                        }
+                      }}
+                    >
                       Withdraw
                     </Button>
                   )}

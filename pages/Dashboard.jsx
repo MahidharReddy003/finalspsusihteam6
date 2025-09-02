@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
@@ -16,6 +17,7 @@ import {
 import { formatDate, formatCurrency } from '../utils';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   // Mock data for dashboard
   const stats = {
     totalInternships: 45,
@@ -179,7 +181,14 @@ export default function Dashboard() {
                     </div>
                   </div>
                   
-                  <Button className="w-full" size="sm">
+                  <Button 
+                    className="w-full" 
+                    size="sm"
+                    onClick={() => {
+                      alert(`Applying to ${internship.title} at ${internship.company}`);
+                      // Here you would typically navigate to application form or make API call
+                    }}
+                  >
                     Apply Now
                   </Button>
                 </div>
@@ -229,10 +238,26 @@ export default function Dashboard() {
                     </div>
                     
                     <div className="mt-3 flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => {
+                          alert(`Viewing interview details for ${interview.position} at ${interview.company}`);
+                          // Here you would typically navigate to interview details page
+                        }}
+                      >
                         View Details
                       </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => {
+                          alert(`Rescheduling interview for ${interview.position} at ${interview.company}`);
+                          // Here you would typically open reschedule modal or navigate to reschedule page
+                        }}
+                      >
                         Reschedule
                       </Button>
                     </div>
@@ -252,15 +277,27 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button className="h-16 flex-col gap-2" variant="outline">
+              <Button 
+                className="h-16 flex-col gap-2" 
+                variant="outline"
+                onClick={() => navigate('/internships')}
+              >
                 <Briefcase className="w-6 h-6" />
                 Browse Internships
               </Button>
-              <Button className="h-16 flex-col gap-2" variant="outline">
+              <Button 
+                className="h-16 flex-col gap-2" 
+                variant="outline"
+                onClick={() => navigate('/recommendations')}
+              >
                 <TrendingUp className="w-6 h-6" />
                 View Recommendations
               </Button>
-              <Button className="h-16 flex-col gap-2" variant="outline">
+              <Button 
+                className="h-16 flex-col gap-2" 
+                variant="outline"
+                onClick={() => navigate('/applications')}
+              >
                 <Users className="w-6 h-6" />
                 My Applications
               </Button>
